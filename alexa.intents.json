@@ -1,0 +1,33 @@
+{
+    "intents":
+    [
+        {
+            "intent": "WhatsPlayingIntent",
+            "slots": []
+        },
+        {
+            "intent": "PlayPauseIntent",
+            "slots": []
+        },
+        {
+            "intent": "StopIntent",
+            "slots": []
+        },
+        {
+            "intent": "RecentMoviesIntent",
+            "slots": []
+        },
+        {
+            "intent": "StartMovieIntent",
+            "slots": [
+                {
+                    "name": "MovieName",
+                    "type": "AMAZON.LITERAL"
+                }
+            ]
+        },
+        {
+          "intent": "AMAZON.HelpIntent"
+        }
+    ]
+}

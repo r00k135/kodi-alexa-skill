@@ -1,0 +1,22 @@
+{
+  "session": {
+    "new": true,
+    "sessionId": "session1234",
+    "attributes": {},
+    "user": {
+      "userId": null
+    },
+    "application": {
+      "applicationId": "amzn1.echo-sdk-ams.app.3dbdc922-6950-4a51-a205-a106b5233447"
+    }
+  },
+  "version": "1.0",
+  "request": {
+    "intent": {
+      "slots": [],
+      "name": "WhatsPlayingIntent"
+    },
+    "type": "IntentRequest",
+    "requestId": "request5678"
+  }
+}
