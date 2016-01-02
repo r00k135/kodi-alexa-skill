@@ -1,0 +1,10 @@
+{
+  "name": "kodi-alexa-skill",
+  "description": "A package to control Kodi with the Alexa Skills Kit",
+  "version": "0.0.1",
+  "author": "Chris Elleman",
+  "dependencies": {
+	  "double-metaphone" : ">=0.1.4"
+  },
+  "engine": "node >= 0.9.0"
+}

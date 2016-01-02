@@ -1,15 +1,26 @@
 //********************************
-// Name: kodi-alexa-skills.js
+// Name: kodi-alexa-skill.js
 //********************************
 
 //Imports
 var http = require('http');
+var fs = require('fs');
 
-//Kodi JSONRPC URL
+// Kodi JSONRPC URL
 var kodiApiHost = "<ip or dynamicDNS host name>";
 var kodiApiPort = 80;
-var KodiApiPath = "/<randomString>/jsonrpc";
+var KodiApiPath = "/<randomURL from Reverse Proxy>/jsonrpc";
+// Alexa Application Id
 var applicationId = "<applicationId>";
+// Load Overrides File - Blocking
+var overrides = JSON.parse(fs.readFileSync('kodi-alexa-skill-override.json', 'utf8'));
+if (overrides) {
+    kodiApiHost = overrides.kodiApiHost;
+    kodiApiPort = overrides.kodiApiPort;
+    KodiApiPath = overrides.KodiApiPath;
+    applicationId = overrides.applicationId;
+}
+
 
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
