@@ -32,15 +32,15 @@ Alexa, ask Kodi:
 
 * whats playing / whats on - ask kodi what is currently playing
 * to play / to pause - toggle between pause and play whilst playing back
-* to stop playing - stop playing current media
+* to stop - stop playing current media
 * list movies - list last 8 movies added to media center
-* start movie - start movie by name [not done]
+* start movie / play movie - start movie by name
 
 ## Install
 Download latest code from github
 > git clone https://github.com:r00k135/kodi-alexa-skill.git
 
-Create an override file called: kodi-alexa-skill-override.json, use the following format and replace the defaults with your actual values so lamdba can access your kodi server:
+Create an override file called: *kodi-alexa-skill-override.json*, use the following format and replace the defaults with your actual values so lamdba can access your kodi server:
 ```
 {
 	"kodiApiHost" : "<ip or dynamicDNS host name>",
@@ -49,6 +49,13 @@ Create an override file called: kodi-alexa-skill-override.json, use the followin
 	"applicationId" : "<applicationId>"
 }
 ```
+
+Ensure that you have the AWS Command Line Tools (CLI) configured (http://aws.amazon.com/tools/#AWS_Command_Line_Interface) with an IAM user who can update lambda function.
+
+Create Lambda Function, as described here, called *kodi-control*: https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/deploying-a-sample-skill-to-aws-lambda#Creating%20the%20Lambda%20Function%20for%20the%20Sample
+
+In order to build your zip file and upload, run the release.sh script:
+> ./release.sh
 
 ## Kodi API
 * Get Active Players

@@ -5,6 +5,7 @@
 //Imports
 var http = require('http');
 var fs = require('fs');
+var doubleMetaphone = require('double-metaphone');
 
 // Kodi JSONRPC URL
 var kodiApiHost = "<ip or dynamicDNS host name>";
@@ -133,37 +134,255 @@ function getWelcomeResponse(callback) {
  */
 function startKodiMovie(intent, session, callback) {
     var cardTitle = intent.name;
+    var MovieNameSlot = intent.slots.MovieName;
     var repromptText = "";
     var sessionAttributes = {};
     var shouldEndSession = true;
     var speechOutput = "";
 
-    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
 
-    var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "filter": {"field": "playcount", "operator": "is", "value": "0"}, "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}';
-    var req = http.request(options, function(res) {
-      var data = [];
-      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-            data.push(chunk);
-      });
-      res.on('end', function () {
-        var response_json = JSON.parse(data.join(''));
-        console.log('BODY: ' + JSON.stringify(response_json));
-        if ( response_json.result.movies.length === 0 ) {
-            speechOutput = "Kodi hasn't found any movies";
-        } else {
-            speechOutput = "Kodi has found movies";
-        }
+    if (MovieNameSlot.value) {
+        console.log('MovieNameSlot Value: ' + MovieNameSlot.value);
+        var slotCompare = buildMetaphone(MovieNameSlot.value);
+        var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+        var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "filter": {"field": "playcount", "operator": "is", "value": "0"}, "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}';
+        var req = http.request(options, function(res) {
+          var data = [];
+          console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+          res.setEncoding('utf8');
+          res.on('data', function (chunk) {
+                data.push(chunk);
+          });
+          res.on('end', function () {
+            var response_json = JSON.parse(data.join(''));
+            var compareAr = [];
+            //console.log('BODY: ' + JSON.stringify(response_json));
+            if ( response_json.result.movies.length === 0 ) {
+                speechOutput = "Kodi hasn't found any movies";
+                callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+            } else {
+                console.log('Number of Movies Found: ' + response_json.result.movies.length);
+                var matchedMovieId = 0;
+                var matchedMovieLabel = "";
+                for (var movie = 0; movie < response_json.result.movies.length; movie++) {
+                    var new_record = {};
+                    new_record.movieid = response_json.result.movies[movie].movieid;
+                    new_record.label = response_json.result.movies[movie].label;
+                    new_record.metaphone = buildMetaphone(new_record.label);
+                    compareAr.push(new_record);
+                    if (slotCompare === new_record.metaphone) {
+                        console.log('Movie Found: ' + JSON.stringify(new_record));        
+                        matchedMovieId = new_record.movieid;
+                        matchedMovieLabel = new_record.label;
+                        // exit the loop
+                        movie = response_json.result.movies.length;
+                    }
+                }
+                console.log('compareAr: ' + JSON.stringify(compareAr));
+                if (matchedMovieId == 0) {
+                    speechOutput = "I'm sorry, no movie found by that name";
+                    callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+                } else {
+                    // Play
+                    var play_data = '{"jsonrpc":"2.0","method":"Player.Open","id":1,"params":{"item":{"movieid":'+matchedMovieId+'}}}';
+                    var req = http.request(options, function(res) {
+                      var play_response_data = [];
+                      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + play_data);
+                      res.setEncoding('utf8');
+                      res.on('data', function (chunk) {
+                            play_response_data.push(chunk);
+                      });
+                      res.on('end', function () {
+                        var play_response_json = JSON.parse(play_response_data.join(''));
+                        console.log('Play Response: ' + JSON.stringify(play_response_json)); 
+                        speechOutput = "Found Movie "+matchedMovieLabel+ " playing";
+                        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+                      });
+                    });
+                    req.write(play_data);
+                    req.end();
+                }
+            }
+          });
+        });
+        req.write(post_data);
+        req.end();
+    }
+    else {
+        console.log('MovieNameSlot Not Set');
+        shouldEndSession = false;
+        speechOutput = "Which movie would you like Kodi to play";
+        repromptText = "Which movie would you like Kodi to play. You can tell the movie " +
+            "saying, start movie cinderella";
         callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-      });
-    });
-    req.write(post_data);
-    req.end();
+    }
+
+
 }
 
+/**
+ * Build Metaphone String from input.
+ */
+ function buildMetaphone(input) {
+    var output = input;
+    var log = "";
 
+    console.log('Metaphone: build string, input is ' + input);
+    var stopwords = [
+        "a",
+        "about",
+        "an",
+        "are",
+        "as",
+        "at",
+        "be",
+        "by",
+        "for",
+        "from",
+        "how",
+        "in",
+        "is",
+        "it",
+        "of",
+        "on",
+        "or",
+        "that",
+        "the",
+        "this",
+        "to",
+        "was",
+        "what",
+        "when",
+        "where",
+        "will",
+        "with",
+    ];
+    // lowercase the string
+    output = output.toLowerCase();
+    // remove full stops
+    output = output.replace(/\./g, "");
+    // remove full commas
+    output = output.replace(/\,/g, " ");
+    // remove dashes stops
+    output = output.replace(/\-/g, " ");
+    // check for number
+    var numberMatchAr = output.match(/\d+/g);
+    if (numberMatchAr !== null) {
+        // Convert number
+        log += "found number: "+JSON.stringify(numberMatchAr)+"\n";
+        // Replace Numbers
+        for (var num = 0; num < numberMatchAr.length; num++) {
+            log += "  converting number: "+numberMatchAr[num]+"\n";
+            var convertedNum = convert (parseInt(numberMatchAr[num]));
+            log += "  converted number: "+convertedNum+"\n";
+            output = output.replace(numberMatchAr[num], convertedNum);
+        }
+        log += "after converstion: "+output+"\n";
+    }
+    else {
+        log += "no number found\n";
+    }
+    // trim whitespace
+    output = output.trim();
+    var prestopwords = output;
+    // check wordcount
+    var prestopwordslength = prestopwords.split(' ').length;
+    log += "prestopwords: "+prestopwords+"\n";
+    log += "prestopwordslength: "+prestopwordslength+"\n";
+    // remove stopwords
+    var outputAr = output.split(' ');
+    var poststopwords = "";
+    for (var word = 0; word < outputAr.length; word++) {
+        var found = 0;
+        for (var i = 0; i < stopwords.length; i++) {
+            if (stopwords[i] === outputAr[word]) {
+                found = 1;
+            }
+        }
+        if (found === 0) {
+            poststopwords += outputAr[word]+ " ";
+        }
+    }
+    //remove double spaces
+    poststopwords = poststopwords.replace("  ", " ");
+    poststopwords = poststopwords.trim();
+    // compare
+    var poststopwordslength = poststopwords.split(' ').length;
+    log += "poststopwords: "+poststopwords+"\n";
+    log += "poststopwordslength: "+poststopwordslength+"\n";
+    // check to make sure we still have a string left
+    if (poststopwordslength === 0) {
+        output = prestopwords;
+        log += "putting stop words back in: "+output+"\n";
+    }
+    else {
+        output = poststopwords;
+        log += "staying with removed stopwords: "+output+"\n";
+    }
+    // replace words with metaphone
+    var wordsAr = output.split(' ');
+    var newOutput = "";
+    for (var i = 0; i < wordsAr.length; i++) {
+        var new_word = doubleMetaphone(wordsAr[i])[0];
+        newOutput += new_word+ " ";
+    }
+    newOutput = newOutput.trim();
+    console.log('Metaphone: log: '+log);
+    output = newOutput;
+    console.log('Metaphone: output: '+output);
+    return output;
+ }
+
+
+/*
+* Convert Numbers to Words - helper functions
+* Reference: http://stackoverflow.com/questions/5529934/javascript-numbers-to-words
+*/
+var ones=['','one','two','three','four','five','six','seven','eight','nine'];
+var tens=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+var teens=['ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+
+
+function convert_millions(num){
+    if (num>=1000000){
+        return convert_millions(Math.floor(num/1000000))+" million "+convert_thousands(num%1000000);
+    }
+    else {
+        return convert_thousands(num);
+    }
+}
+
+function convert_thousands(num){
+    if (num>=1000){
+        return convert_hundreds(Math.floor(num/1000))+" thousand "+convert_hundreds(num%1000);
+    }
+    else{
+        return convert_hundreds(num);
+    }
+}
+
+function convert_hundreds(num){
+    if (num>99){
+        return ones[Math.floor(num/100)]+" hundred "+convert_tens(num%100);
+    }
+    else{
+        return convert_tens(num);
+    }
+}
+
+function convert_tens(num){
+    if (num<10) return ones[num];
+    else if (num>=10 && num<20) return teens[num-10];
+    else{
+        return tens[Math.floor(num/10)]+" "+ones[num%10];
+    }
+}
+
+function convert(num){
+    if (num==0) return "zero";
+    else return convert_millions(num);
+}
 
 /**
  * Asks Kodi for recent movies.

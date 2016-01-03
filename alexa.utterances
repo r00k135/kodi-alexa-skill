@@ -3,13 +3,22 @@ WhatsPlayingIntent what's playing
 StopIntent to stop
 StopIntent to stop playing
 PlayPauseIntent to play
-PlayPauseIntent to play movie
-PlayPauseIntent to play film
 PlayPauseIntent to resume
 PlayPauseIntent to pause
 PlayPauseIntent to pause playback
 RecentMoviesIntent list recent movies
 RecentMoviesIntent list movies
+StartMovieIntent start movie
+StartMovieIntent start movie {Cinderella|MovieName}
+StartMovieIntent start movie {Despicable Me|MovieName}
+StartMovieIntent start movie {Despicable Me Two|MovieName}
+StartMovieIntent start movie {Frozen Fever|MovieName}
+StartMovieIntent start movie {Frozen|MovieName}
+StartMovieIntent start movie {Tangled|MovieName}
+StartMovieIntent start movie {Tangled Ever After|MovieName}
+StartMovieIntent start movie {The Princess and the Frog|MovieName}
+StartMovieIntent start movie {The Gruffalo|MovieName}
+StartMovieIntent start movie {The Gruffalo's Child|MovieName}
 StartMovieIntent to start movie
 StartMovieIntent to start movie {Cinderella|MovieName}
 StartMovieIntent to start movie {Despicable Me|MovieName}
@@ -21,3 +30,14 @@ StartMovieIntent to start movie {Tangled Ever After|MovieName}
 StartMovieIntent to start movie {The Princess and the Frog|MovieName}
 StartMovieIntent to start movie {The Gruffalo|MovieName}
 StartMovieIntent to start movie {The Gruffalo's Child|MovieName}
+StartMovieIntent play movie
+StartMovieIntent play movie {Cinderella|MovieName}
+StartMovieIntent play movie {Despicable Me|MovieName}
+StartMovieIntent play movie {Despicable Me Two|MovieName}
+StartMovieIntent play movie {Frozen Fever|MovieName}
+StartMovieIntent play movie {Frozen|MovieName}
+StartMovieIntent play movie {Tangled|MovieName}
+StartMovieIntent play movie {Tangled Ever After|MovieName}
+StartMovieIntent play movie {The Princess and the Frog|MovieName}
+StartMovieIntent play movie {The Gruffalo|MovieName}
+StartMovieIntent play movie {The Gruffalo's Child|MovieName}
