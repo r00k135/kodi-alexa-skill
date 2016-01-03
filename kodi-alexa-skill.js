@@ -146,7 +146,7 @@ function startKodiMovie(intent, session, callback) {
         var slotCompare = buildMetaphone(MovieNameSlot.value);
         var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
 
-        var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "filter": {"field": "playcount", "operator": "is", "value": "0"}, "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}';
+        var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}';
         var req = http.request(options, function(res) {
           var data = [];
           console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
@@ -179,9 +179,10 @@ function startKodiMovie(intent, session, callback) {
                         movie = response_json.result.movies.length;
                     }
                 }
-                console.log('compareAr: ' + JSON.stringify(compareAr));
+                //console.log('compareAr: ' + JSON.stringify(compareAr));
+                console.log('compareAr length: ' + compareAr.length);
                 if (matchedMovieId == 0) {
-                    speechOutput = "I'm sorry, no movie found by that name";
+                    speechOutput = "I'm sorry, no movie found by the name "+MovieNameSlot.value;
                     callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
                 } else {
                     // Play
@@ -264,8 +265,10 @@ function startKodiMovie(intent, session, callback) {
     output = output.replace(/\./g, "");
     // remove full commas
     output = output.replace(/\,/g, " ");
-    // remove dashes stops
+    // remove dashes
     output = output.replace(/\-/g, " ");
+    // remove plus symbols
+    output = output.replace(/\+/g, " ");
     // check for number
     var numberMatchAr = output.match(/\d+/g);
     if (numberMatchAr !== null) {

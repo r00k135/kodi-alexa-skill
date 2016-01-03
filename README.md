@@ -71,8 +71,22 @@ In order to build your zip file and upload, run the release.sh script:
   > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.GetRecentlyAddedMovies", "params": { "limits": { "start" : 0, "end": 8 }, "properties" : ["imdbnumber"] }, "id": "libMovies"}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
 * Get All Movies
-  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "filter": {"field": "playcount", "operator": "is", "value": "0"}, "properties" : ["imdbnumber"], "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}' -H 'content-type: application/json;' http://localhost/jsonrpc
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
+* Goto Home
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "Input.Home", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
+* Go Back
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "Input.Back", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
+* Scan for new media
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
+* Clean media library
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.Clean", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
+### Play Media
+curl -s --data-binary '{"jsonrpc":"2.0","method":"Player.Open","id":1,"params":{"item":{"movieid":1}}}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
 ## Appendix A: References
 
