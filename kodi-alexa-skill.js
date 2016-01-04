@@ -96,6 +96,26 @@ function onIntent(intentRequest, session, callback) {
         playPauseKodi(intent, session, callback);
     } else if ("RecentMoviesIntent" === intentName) {
         recentKodiMovies(intent, session, callback);
+    } else if ("ScanLibraryIntent" === intentName) {
+        scanKodiLibrary(intent, session, callback);
+    } else if ("CleanLibraryIntent" === intentName) {
+        cleanKodiLibrary(intent, session, callback);
+    } else if ("HomeInputIntent" === intentName) {
+        gotoKodiHome(intent, session, callback);
+    } else if ("BackInputIntent" === intentName) {
+        goBackInKodiGUI(intent, session, callback);
+    } else if ("DownInputIntent" === intentName) {
+        KodiDownGUI(intent, session, callback);
+    } else if ("UpInputIntent" === intentName) {
+        KodiUpGUI(intent, session, callback);
+    } else if ("LeftInputIntent" === intentName) {
+        KodiLeftGUI(intent, session, callback);
+    } else if ("RightInputIntent" === intentName) {
+        KodiRightGUI(intent, session, callback);
+    } else if ("InfoInputIntent" === intentName) {
+        KodiInfoGUI(intent, session, callback);
+    } else if ("SelectInputIntent" === intentName) {
+        KodiSelectGUI(intent, session, callback);
     } else if ("StartMovieIntent" === intentName) {
         startKodiMovie(intent, session, callback);
     } else {
@@ -128,6 +148,335 @@ function getWelcomeResponse(callback) {
     callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
 
+/**
+ * Kodi Show Info in GUI
+ */
+function KodiSelectGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Select", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't select";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Show Info in GUI
+ */
+function KodiInfoGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Info", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't show information";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Go Right in GUI
+ */
+function KodiRightGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Right", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't go right";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Go Left in GUI
+ */
+function KodiLeftGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Left", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't go left";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Go Up in GUI
+ */
+function KodiUpGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Up", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't go up";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Go Down in GUI
+ */
+function KodiDownGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Down", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't go down";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Go Back in GUI
+ */
+function goBackInKodiGUI(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Back", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "OK";
+            
+        } else {
+           speechOutput = "Kodi couldn't go back";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Goto Home in GUI
+ */
+function gotoKodiHome(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "Input.Home", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "Kodi is on home screen";
+            
+        } else {
+           speechOutput = "Kodi couldn't get to the home screen";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Clean Media Library.
+ */
+function cleanKodiLibrary(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.Clean", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "Kodi is cleaning media library";
+            
+        } else {
+           speechOutput = "Kodi is not cleaning for media library";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
+
+/**
+ * Kodi Rescan Media Library.
+ */
+function scanKodiLibrary(intent, session, callback) {
+    var cardTitle = intent.name;
+    var repromptText = "";
+    var sessionAttributes = {};
+    var shouldEndSession = true;
+    var speechOutput = "";
+
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": 1}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+        var response_json = JSON.parse(chunk);
+        if ( response_json.result === "OK" ) {
+            speechOutput = "Kodi is scanning for new media";
+            
+        } else {
+           speechOutput = "Kodi is not scanning for new media";
+        }
+        callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
+
 
 /**
  * Asks Kodi for recent movies.
@@ -146,7 +495,7 @@ function startKodiMovie(intent, session, callback) {
         var slotCompare = buildMetaphone(MovieNameSlot.value);
         var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
 
-        var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}';
+        var post_data = '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "properties" : [ "tag" ] }, "id": "libMovies"}';
         var req = http.request(options, function(res) {
           var data = [];
           console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
@@ -156,7 +505,6 @@ function startKodiMovie(intent, session, callback) {
           });
           res.on('end', function () {
             var response_json = JSON.parse(data.join(''));
-            var compareAr = [];
             //console.log('BODY: ' + JSON.stringify(response_json));
             if ( response_json.result.movies.length === 0 ) {
                 speechOutput = "Kodi hasn't found any movies";
@@ -169,8 +517,15 @@ function startKodiMovie(intent, session, callback) {
                     var new_record = {};
                     new_record.movieid = response_json.result.movies[movie].movieid;
                     new_record.label = response_json.result.movies[movie].label;
-                    new_record.metaphone = buildMetaphone(new_record.label);
-                    compareAr.push(new_record);
+                    if (response_json.result.movies[movie].tag.length > 0) {
+                        new_record.metaphone = response_json.result.movies[movie].tag[0];
+                        console.log('Got metaphone from first Kodi tag: ' + new_record.metaphone);
+                    }
+                    else {
+                        new_record.metaphone = buildMetaphone(new_record.label);    
+                        // Store Metaphone as first Kodi Tag
+                        storeKodiTag(new_record.movieid, new_record.metaphone);
+                    }
                     if (slotCompare === new_record.metaphone) {
                         console.log('Movie Found: ' + JSON.stringify(new_record));        
                         matchedMovieId = new_record.movieid;
@@ -179,8 +534,6 @@ function startKodiMovie(intent, session, callback) {
                         movie = response_json.result.movies.length;
                     }
                 }
-                //console.log('compareAr: ' + JSON.stringify(compareAr));
-                console.log('compareAr length: ' + compareAr.length);
                 if (matchedMovieId == 0) {
                     speechOutput = "I'm sorry, no movie found by the name "+MovieNameSlot.value;
                     callback(sessionAttributes, buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
@@ -331,7 +684,7 @@ function startKodiMovie(intent, session, callback) {
         newOutput += new_word+ " ";
     }
     newOutput = newOutput.trim();
-    console.log('Metaphone: log: '+log);
+    //console.log('Metaphone: log: '+log);
     output = newOutput;
     console.log('Metaphone: output: '+output);
     return output;
@@ -427,6 +780,24 @@ function recentKodiMovies(intent, session, callback) {
     req.end();
 }
 
+
+/**
+ * Asks Kodi for recent movies.
+ */
+function storeKodiTag(movieid, tag) {
+    var options = { host: kodiApiHost, port: kodiApiPort, path: KodiApiPath, method: 'POST', headers: { 'Content-Type': 'application/json' } };
+
+    var post_data = '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : '+movieid+', "tag" : ["'+tag+'"] }}';
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode); console.log('HEADERS: ' + JSON.stringify(res.headers)); console.log('DATA: ' + post_data);
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+      });
+    });
+    req.write(post_data);
+    req.end();
+}
 
 
 /**

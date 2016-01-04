@@ -41,3 +41,14 @@ StartMovieIntent play movie {Tangled Ever After|MovieName}
 StartMovieIntent play movie {The Princess and the Frog|MovieName}
 StartMovieIntent play movie {The Gruffalo|MovieName}
 StartMovieIntent play movie {The Gruffalo's Child|MovieName}
+ScanLibraryIntent scan library
+CleanLibraryIntent clean library
+HomeInputIntent to go home
+BackInputIntent to back
+DownInputIntent to go down
+UpInputIntent to go up
+LeftInputIntent to go left
+RightInputIntent to go right
+RightInputIntent to go right
+InfoInputIntent to show info
+InfoInputIntent to show information

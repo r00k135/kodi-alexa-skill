@@ -73,6 +73,9 @@ In order to build your zip file and upload, run the release.sh script:
 * Get All Movies
   > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
+* Get All Movies with Tags
+  > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": { "properties" : [ "tag" ], "sort": { "order": "ascending", "method": "label", "ignorearticle": true } }, "id": "libMovies"}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
 * Goto Home
   > curl -s --data-binary '{"jsonrpc": "2.0", "method": "Input.Home", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
@@ -85,8 +88,11 @@ In order to build your zip file and upload, run the release.sh script:
 * Clean media library
   > curl -s --data-binary '{"jsonrpc": "2.0", "method": "VideoLibrary.Clean", "id": 1}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
-### Play Media
-curl -s --data-binary '{"jsonrpc":"2.0","method":"Player.Open","id":1,"params":{"item":{"movieid":1}}}' -H 'content-type: application/json;' http://localhost/jsonrpc
+* Play Media
+  > curl -s --data-binary '{"jsonrpc":"2.0","method":"Player.Open","id":1,"params":{"item":{"movieid":1}}}' -H 'content-type: application/json;' http://localhost/jsonrpc
+
+* Set Tag
+  > curl -s --data-binary '{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.SetMovieDetails", "params": {"movieid" : 1, "tag" : ["TNT AT TS LTR"] }}' -H 'content-type: application/json;' http://localhost/jsonrpc
 
 ## Appendix A: References
 
@@ -94,3 +100,5 @@ curl -s --data-binary '{"jsonrpc":"2.0","method":"Player.Open","id":1,"params":{
 * https://developer.amazon.com/appsandservices/solutions/alexa/alexa-skills-kit/docs/defining-the-voice-interface
 * https://www.npmjs.com/package/double-metaphone
 * http://kodi.wiki/view/JSON-RPC_API/v6
+* https://github.com/robnewton/JSON-RPC-Browser
+* https://github.com/bwssytems/ha-bridge

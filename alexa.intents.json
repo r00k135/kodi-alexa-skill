@@ -18,6 +18,46 @@
             "slots": []
         },
         {
+            "intent": "ScanLibraryIntent",
+            "slots": []
+        },
+        {
+            "intent": "CleanLibraryIntent",
+            "slots": []
+        },
+        {
+            "intent": "HomeInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "BackInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "DownInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "UpInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "LeftInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "RightInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "InfoInputIntent",
+            "slots": []
+        },
+        {
+            "intent": "SelectInputIntent",
+            "slots": []
+        },
+        {
             "intent": "StartMovieIntent",
             "slots": [
                 {
