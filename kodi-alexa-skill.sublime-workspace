@@ -22,6 +22,22 @@
 				"buffer_size": 57,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "alexa.utterances",
+			"settings":
+			{
+				"buffer_size": 2390,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "alexa.intents.json",
+			"settings":
+			{
+				"buffer_size": 1523,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -102,7 +118,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -118,8 +134,8 @@
 						"selection":
 						[
 							[
-								0,
-								37197
+								22545,
+								22120
 							]
 						],
 						"settings":
@@ -129,10 +145,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 540.0,
+						"translation.y": 8100.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -148,8 +164,8 @@
 						"selection":
 						[
 							[
-								55,
-								0
+								57,
+								57
 							]
 						],
 						"settings":
@@ -160,7 +176,65 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "alexa.utterances",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1139,
+								1139
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "alexa.intents.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1523,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1059,
+								1059
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
